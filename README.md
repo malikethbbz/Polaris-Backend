@@ -1,8 +1,8 @@
 # Banorte Backend  
-# TEST BUILD V1
+# TEST BUILD V2
 
 Este es el repositorio del backend del proyecto **Polaris**, construido con **NestJS**, **Prisma** y **PostgreSQL**.  
-El proyecto expone una API REST modular para la gestión de usuarios y otros recursos del sistema.
+El proyecto expone una API REST modular para la gestión de usuarios, empresas y reglas de negocio.
 
 ---
 
@@ -12,7 +12,7 @@ El proyecto expone una API REST modular para la gestión de usuarios y otros rec
 - [PostgreSQL](https://www.postgresql.org/) – Base de datos relacional.  
 - [Docker](https://www.docker.com/) – Orquestación de PostgreSQL y pgAdmin.  
 - [pgAdmin](https://www.pgadmin.org/) – GUI web para PostgreSQL.  
-- [JWT](https://jwt.io/) – Autenticación basada en tokens.  
+- [JWT](https://jwt.io/) – Autenticación basada en tokens (pendiente).  
 
 ---
 
@@ -85,22 +85,20 @@ Esto abre un panel web para explorar y editar tablas de la base de datos.
 ---
 
 ## 6. Seeder (datos iniciales)
-Para cargar un usuario y roles iniciales definidos en `prisma/seed.ts`, ejecutar:
+El archivo `prisma/seed.ts` incluye datos iniciales:  
 
+- Rol **ADMIN**  
+- Usuario **Nos Feratu** (`Nosf@banorte.mx`)  
+- Empresas **Banorte** y **Santander**  
+- Categoría **General**  
+- Estado **Activo**  
+- Reglas de negocio:
+  - Validar RFC (Banorte)  
+  - Monto Máximo (Santander)  
+
+Ejecutar con:
 ```bash
 npm run prisma:seed
-```
-
-Esto insertará registros de ejemplo como el usuario administrador:  
-
-```json
-{
-  "firstName": "Cared",
-  "lastName1": "Castaños",
-  "email": "cared@banorte.mx",
-  "password": "Password123",
-  "roleId": 1
-}
 ```
 
 ---
@@ -117,24 +115,27 @@ El backend quedará disponible en `http://localhost:3000`.
 ## Endpoints Disponibles
 
 ### Usuarios (`/users`)
-- `GET /users` → lista todos los usuarios.  
-- `GET /users/:id` → obtener usuario por ID.  
-- `POST /users` → crear usuario.  
-  ```json
-  {
-    "firstName": "Name",
-    "lastName1": "Last Name",
-    "email": "user@banorte.mx",
-    "password": "Password123",
-    "roleId": 1
-  }
-  ```
-- `PATCH /users/:id` → actualizar usuario.  
-- `DELETE /users/:id` → eliminar usuario.  
+- `GET /users` → lista todos los usuarios  
+- `GET /users/:id` → obtener usuario por ID  
+- `POST /users` → crear usuario  
+- `PATCH /users/:id` → actualizar usuario  
+- `DELETE /users/:id` → eliminar usuario  
+
+### Empresas (`/companies`)
+- `GET /companies` → lista todas las empresas  
+- `GET /companies/:id` → obtener empresa por ID  
+- `POST /companies` → crear empresa  
+- `PATCH /companies/:id` → actualizar empresa  
+- `DELETE /companies/:id` → eliminar empresa  
+
+### Reglas de negocio (`/rules`)
+- `GET /rules` → lista todas las reglas  
+- `GET /rules/:id` → obtener regla por ID  
+- `POST /rules` → crear regla  
+- `PATCH /rules/:id` → actualizar regla  
+- `DELETE /rules/:id` → eliminar regla  
 
 ### Próximos módulos
-- `/rules` → reglas de negocio  
-- `/companies` → empresas  
 - `/categories` → categorías  
 - `/states` → estados  
 - `/files` → archivos Banorte  
