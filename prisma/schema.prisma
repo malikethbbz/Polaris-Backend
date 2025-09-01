@@ -1,0 +1,213 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+enum ExecStatus {
+  SUCCESS
+  FAILED
+  IN_PROGRESS
+}
+
+enum FieldType {
+  STRING
+  INTEGER
+  DECIMAL
+  DATE
+  BOOLEAN
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  firstName  String
+  middleName String?
+  lastName1  String
+  lastName2  String?
+  email      String   @unique
+  password   String // hash
+  roleId     Int
+  role       Role     @relation(fields: [roleId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relación inversa para modifiedBy en otras tablas
+  modifiedBusinessRules BusinessRule[] @relation("UserModifiedLogs")
+  modifiedFiles         FileBanorte[]  @relation("UserModifiedLogs")
+  modifiedLayoutFields  LayoutField[]  @relation("UserModifiedLogs")
+  modifiedLogs          AuditLog[]     @relation("UserModifiedLogs")
+
+  // Ejecuciones y extracciones
+  executions  RuleExecution[]
+  extractions ExtractionProcess[]
+}
+
+model Role {
+  id         Int             @id @default(autoincrement())
+  name       String          @unique
+  users      User[]
+  privileges RolePrivilege[]
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+}
+
+model Privilege {
+  id        Int             @id @default(autoincrement())
+  name      String          @unique
+  roles     RolePrivilege[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+model RolePrivilege {
+  roleId      Int
+  privilegeId Int
+  role        Role      @relation(fields: [roleId], references: [id])
+  privilege   Privilege @relation(fields: [privilegeId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@id([roleId, privilegeId])
+}
+
+model Company {
+  id        Int            @id @default(autoincrement())
+  name      String         @unique
+  rules     BusinessRule[]
+  files     FileBanorte[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model Category {
+  id          Int            @id @default(autoincrement())
+  name        String         @unique
+  description String?
+  rules       BusinessRule[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model State {
+  id        Int            @id @default(autoincrement())
+  name      String         @unique
+  color     String?
+  rules     BusinessRule[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model BusinessRule {
+  id           Int       @id @default(autoincrement())
+  name         String
+  description  String?
+  definition   Json
+  companyId    Int?
+  company      Company?  @relation(fields: [companyId], references: [id])
+  categoryId   Int?
+  category     Category? @relation(fields: [categoryId], references: [id])
+  stateId      Int?
+  state        State?    @relation(fields: [stateId], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  modifiedById Int?
+  modifiedBy   User?     @relation("UserModifiedLogs", fields: [modifiedById], references: [id])
+
+  executions RuleExecution[]
+}
+
+model FileBanorte {
+  id           Int      @id @default(autoincrement())
+  name         String
+  companyId    Int?
+  company      Company? @relation(fields: [companyId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  modifiedById Int?
+  modifiedBy   User?    @relation("UserModifiedLogs", fields: [modifiedById], references: [id])
+
+  values      LayoutValue[]
+  executions  RuleExecution[]
+  extractions ExtractionProcess[]
+}
+
+model LayoutField {
+  id           Int       @id @default(autoincrement())
+  name         String
+  fieldType    FieldType
+  length       Int?
+  startIndex   Int?
+  endIndex     Int?
+  required     Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  modifiedById Int?
+  modifiedBy   User?     @relation("UserModifiedLogs", fields: [modifiedById], references: [id])
+
+  values LayoutValue[]
+}
+
+model LayoutValue {
+  // relación archivo-campo-valor
+  id        Int         @id @default(autoincrement())
+  fileId    Int
+  fieldId   Int
+  file      FileBanorte @relation(fields: [fileId], references: [id])
+  field     LayoutField @relation(fields: [fieldId], references: [id])
+  value     String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@unique([fileId, fieldId])
+}
+
+model RuleExecution {
+  id         Int          @id @default(autoincrement())
+  fileId     Int
+  ruleId     Int
+  status     ExecStatus   @default(IN_PROGRESS)
+  executedAt DateTime     @default(now())
+  userId     Int?
+  user       User?        @relation(fields: [userId], references: [id])
+  file       FileBanorte  @relation(fields: [fileId], references: [id])
+  rule       BusinessRule @relation(fields: [ruleId], references: [id])
+}
+
+model ExtractionProcess {
+  id           Int         @id @default(autoincrement())
+  fileId       Int
+  originalName String
+  status       ExecStatus  @default(IN_PROGRESS)
+  executedAt   DateTime    @default(now())
+  userId       Int?
+  user         User?       @relation(fields: [userId], references: [id])
+  file         FileBanorte @relation(fields: [fileId], references: [id])
+}
+
+model AuditLog {
+  id         Int         @id @default(autoincrement())
+  entityName String
+  recordId   Int
+  action     AuditAction
+  before     Json?
+  after      Json?
+  userId     Int?
+  user       User?       @relation("UserModifiedLogs", fields: [userId], references: [id])
+  createdAt  DateTime    @default(now())
+}
