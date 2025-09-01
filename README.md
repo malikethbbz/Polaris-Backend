@@ -88,7 +88,7 @@ Esto abre un panel web para explorar y editar tablas de la base de datos.
 El archivo `prisma/seed.ts` incluye datos iniciales:  
 
 - Rol **ADMIN**  
-- Usuario **Nos Feratu** (`Nosf@banorte.mx`)  
+- Usuario **Hector Martinez** (`HMtinez@banorte.mx`)  
 - Empresas **Banorte** y **Santander**  
 - Categoría **General**  
 - Estado **Activo**  
