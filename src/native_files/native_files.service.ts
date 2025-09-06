@@ -7,24 +7,23 @@ export class NativeFileService {
   constructor(private prisma: PrismaService) {}
 
   create(dto: CreateNativeFileDto) {
-    return this.prisma.businessRule.create({
+    return this.prisma.fileBanorte.create({
       data: {
         ...dto,
-        definition: dto.definition as any, 
       },
     });
   }
 
   findAll() {
-    return this.prisma.businessRule.findMany({
-      include: { company: true, category: true, state: true },
+    return this.prisma.fileBanorte.findMany({
+      include: { company: true},
     });
   }
 
   findOne(id: number) {
-    return this.prisma.businessRule.findUnique({
+    return this.prisma.fileBanorte.findUnique({
       where: { id },
-      include: { company: true, category: true, state: true },
+      include: { company: true },
     });
   }
 
@@ -39,6 +38,6 @@ export class NativeFileService {
 //   }
 
   remove(id: number) {
-    return this.prisma.businessRule.delete({ where: { id } });
+    return this.prisma.fileBanorte.delete({ where: { id } });
   }
 }
