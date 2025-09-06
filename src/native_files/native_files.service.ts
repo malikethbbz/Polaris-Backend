@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateRuleDto } from './dto/create-rule.dto';
-import { UpdateRuleDto } from './dto/update-rule.dto';
+import { CreateNativeFileDto } from './dto/create-native-file.dto';
 
 @Injectable()
-export class RulesService {
+export class NativeFileService {
   constructor(private prisma: PrismaService) {}
 
-  create(dto: CreateRuleDto) {
+  create(dto: CreateNativeFileDto) {
     return this.prisma.businessRule.create({
       data: {
         ...dto,
@@ -29,15 +28,15 @@ export class RulesService {
     });
   }
 
-  update(id: number, dto: UpdateRuleDto) {
-    return this.prisma.businessRule.update({
-      where: { id },
-      data: {
-        ...dto,
-        definition: dto.definition as any,
-      },
-    });
-  }
+//   update(id: number, dto: UpdateRuleDto) {
+//     return this.prisma.businessRule.update({
+//       where: { id },
+//       data: {
+//         ...dto,
+//         definition: dto.definition as any,
+//       },
+//     });
+//   }
 
   remove(id: number) {
     return this.prisma.businessRule.delete({ where: { id } });

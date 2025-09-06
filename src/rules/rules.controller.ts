@@ -3,12 +3,14 @@ import { RulesService } from './rules.service';
 import { CreateRuleDto } from './dto/create-rule.dto';
 import { UpdateRuleDto } from './dto/update-rule.dto';
 
-@Controller('rules')
+@Controller('business-rules')
 export class RulesController {
   constructor(private readonly rulesService: RulesService) {}
 
   @Post()
   create(@Body() dto: CreateRuleDto) {
+    // console.log("OK");
+    // return;
     return this.rulesService.create(dto);
   }
 
