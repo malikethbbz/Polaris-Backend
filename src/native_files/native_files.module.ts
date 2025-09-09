@@ -8,4 +8,4 @@ import { PrismaModule } from '../prisma/prisma.module';
   controllers: [NativeFileController],
   providers: [NativeFileService],
 })
-export class RulesModule {}
+export class NativeFilesModule { }

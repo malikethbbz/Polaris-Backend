@@ -8,8 +8,6 @@ export class RuleExecutionController {
 
   @Post()
   create(@Body() dto: CreateRuleExecutionDto) {
-    // console.log("OK");
-    // return;
     return this.rulesService.create(dto);
   }
 

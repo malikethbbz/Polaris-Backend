@@ -2,14 +2,12 @@ import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/commo
 import { NativeFileService } from './native_files.service';
 import { CreateNativeFileDto } from './dto/create-native-file.dto';
 
-@Controller('native-file')
+@Controller('native-files')
 export class NativeFileController {
   constructor(private readonly nativeFileService: NativeFileService) {}
 
   @Post()
   create(@Body() dto: CreateNativeFileDto) {
-    // console.log("OK");
-    // return;
     return this.nativeFileService.create(dto);
   }
 

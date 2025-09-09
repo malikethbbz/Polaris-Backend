@@ -3,6 +3,11 @@ import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { CompaniesModule } from './companies/companies.module';
 import { RulesModule } from './rules/rules.module';
+import { RuleExecutionsModule } from './rule_executions/rule_execution.module';
+import { NativeFilesModule } from './native_files/native_files.module';
+import { LayoutFieldsModule } from './layout_fields/rules.module';
+import { LayoutValuesController } from './layout_values/layout_values.controller';
+import { LayoutValuesModule } from './layout_values/layout_values.module';
 
 @Module({
   imports: [
@@ -10,6 +15,10 @@ import { RulesModule } from './rules/rules.module';
     UsersModule,
     CompaniesModule,
     RulesModule,
+    RuleExecutionsModule,
+    NativeFilesModule,
+    LayoutFieldsModule,
+    LayoutValuesModule
   ],
 })
-export class AppModule {}
+export class AppModule { }
