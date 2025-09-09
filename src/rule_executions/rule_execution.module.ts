@@ -8,4 +8,4 @@ import { PrismaModule } from '../prisma/prisma.module';
   controllers: [RuleExecutionController],
   providers: [RuleExecutionService],
 })
-export class RulesModule { }
+export class RuleExecutionsModule { }

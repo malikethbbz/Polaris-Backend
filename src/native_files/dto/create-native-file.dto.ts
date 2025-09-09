@@ -6,21 +6,7 @@ export class CreateNativeFileDto {
   name: string;
 
   @IsOptional()
-  @IsString()
-  description?: string;
-
-  @IsNotEmpty()
-  definition: object; 
-
-  @IsOptional()
   @IsInt()
   companyId?: number;
 
-  @IsOptional()
-  @IsInt()
-  categoryId?: number;
-
-  @IsOptional()
-  @IsInt()
-  stateId?: number;
 }
