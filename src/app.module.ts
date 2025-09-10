@@ -8,6 +8,7 @@ import { NativeFilesModule } from './native_files/native_files.module';
 import { LayoutFieldsModule } from './layout_fields/rules.module';
 import { LayoutValuesController } from './layout_values/layout_values.controller';
 import { LayoutValuesModule } from './layout_values/layout_values.module';
+import { FileParsersModule } from './file_parsers/file_parsers.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { LayoutValuesModule } from './layout_values/layout_values.module';
     RuleExecutionsModule,
     NativeFilesModule,
     LayoutFieldsModule,
-    LayoutValuesModule
+    LayoutValuesModule,
+    FileParsersModule
   ],
 })
 export class AppModule { }

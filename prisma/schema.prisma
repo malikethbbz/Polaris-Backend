@@ -164,17 +164,17 @@ model LayoutField {
 }
 
 model LayoutValue {
-  // relación archivo-campo-valor
   id        Int         @id @default(autoincrement())
   fileId    Int
   fieldId   Int
+  row       Int 
   file      FileBanorte @relation(fields: [fileId], references: [id])
   field     LayoutField @relation(fields: [fieldId], references: [id])
   value     String
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 
-  @@unique([fileId, fieldId])
+  @@unique([fileId, fieldId, row])
 }
 
 model RuleExecution {

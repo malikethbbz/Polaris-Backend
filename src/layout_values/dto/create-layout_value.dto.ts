@@ -12,4 +12,8 @@ export class CreateLayoutValueDto {
   @IsString()
   @IsNotEmpty()
   value: string;
+
+  @IsInt()
+  @IsNotEmpty()
+  row: number;
 }
