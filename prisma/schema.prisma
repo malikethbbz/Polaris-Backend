@@ -134,7 +134,7 @@ model BusinessRule {
 
 model FileBanorte {
   id           Int      @id @default(autoincrement())
-  name         String
+  name         String?
   companyId    Int?
   company      Company? @relation(fields: [companyId], references: [id])
   createdAt    DateTime @default(now())
@@ -167,7 +167,7 @@ model LayoutValue {
   id        Int         @id @default(autoincrement())
   fileId    Int
   fieldId   Int
-  row       Int 
+  row       Int
   file      FileBanorte @relation(fields: [fileId], references: [id])
   field     LayoutField @relation(fields: [fieldId], references: [id])
   value     String
@@ -178,15 +178,15 @@ model LayoutValue {
 }
 
 model RuleExecution {
-  id         Int          @id @default(autoincrement())
+  id         Int           @id @default(autoincrement())
   fileId     Int
-  ruleId     Int
-  status     ExecStatus   @default(IN_PROGRESS)
-  executedAt DateTime     @default(now())
+  ruleId     Int?
+  status     ExecStatus    @default(IN_PROGRESS)
+  executedAt DateTime      @default(now())
   userId     Int?
-  user       User?        @relation(fields: [userId], references: [id])
-  file       FileBanorte  @relation(fields: [fileId], references: [id])
-  rule       BusinessRule @relation(fields: [ruleId], references: [id])
+  user       User?         @relation(fields: [userId], references: [id])
+  file       FileBanorte   @relation(fields: [fileId], references: [id])
+  rule       BusinessRule? @relation(fields: [ruleId], references: [id])
 }
 
 model ExtractionProcess {

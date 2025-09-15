@@ -13,11 +13,13 @@ export class RuleExecutionService {
         ruleId: dto.ruleId, // si viene undefined, se manda null
         status: dto.status
       },
+      include: { rule: true, file: true },
     });
   }
 
   findAll() {
     return this.prisma.ruleExecution.findMany({
+      include: { rule: true, file: true },
       // include: { company: true, category: true, state: true },
     });
   }
@@ -25,7 +27,7 @@ export class RuleExecutionService {
   findOne(id: number) {
     return this.prisma.ruleExecution.findUnique({
       where: { id },
-      // include: { company: true, category: true, state: true },
+      include: { rule: true, file: true },
     });
   }
 
@@ -40,6 +42,6 @@ export class RuleExecutionService {
   // }
 
   remove(id: number) {
-    return this.prisma.ruleExecution.delete({ where: { id } });
+    return this.prisma.ruleExecution.delete({ where: { id }, include: { rule: true, file: true } });
   }
 }

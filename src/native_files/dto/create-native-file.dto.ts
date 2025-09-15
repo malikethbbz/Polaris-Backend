@@ -1,8 +1,8 @@
 import { IsNotEmpty, IsOptional, IsString, IsInt } from 'class-validator';
 
 export class CreateNativeFileDto {
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   name: string;
 
   @IsOptional()

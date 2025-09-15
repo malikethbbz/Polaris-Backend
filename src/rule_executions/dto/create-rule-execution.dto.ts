@@ -13,6 +13,7 @@ export class CreateRuleExecutionDto {
   fileId: number;
 
   @IsInt()
+  @IsOptional()
   ruleId: number;
 
   @IsEnum(ExecStatus)
