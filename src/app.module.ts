@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { CompaniesModule } from './companies/companies.module';
@@ -20,7 +21,8 @@ import { FileParsersModule } from './file_parsers/file_parsers.module';
     NativeFilesModule,
     LayoutFieldsModule,
     LayoutValuesModule,
-    FileParsersModule
+    FileParsersModule,
+    AuthModule,
   ],
 })
 export class AppModule { }
