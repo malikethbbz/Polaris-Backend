@@ -12,7 +12,7 @@ El proyecto expone una API REST modular para la gestión de usuarios, empresas y
 - [PostgreSQL](https://www.postgresql.org/) – Base de datos relacional.  
 - [Docker](https://www.docker.com/) – Orquestación de PostgreSQL y pgAdmin.  
 - [pgAdmin](https://www.pgadmin.org/) – GUI web para PostgreSQL.  
-- [JWT](https://jwt.io/) – Autenticación basada en tokens (pendiente).  
+- [JWT](https://jwt.io/) – Autenticación basada en tokens.  
 
 ---
 
@@ -52,12 +52,6 @@ docker compose up -d
 Esto inicia:
 - PostgreSQL en `localhost:5433`
 - pgAdmin en `http://localhost:5050`
-
-Si ya tienes contenedores con el mismo nombre, elimina los antiguos antes:
-```bash
-docker ps -a
-docker rm -f <container_id>
-```
 
 ---
 
@@ -112,42 +106,44 @@ El backend quedará disponible en `http://localhost:3000`.
 
 ---
 
-## Endpoints Disponibles
+## Endpoints de Autenticación
 
-### Usuarios (`/users`)
-- `GET /users` → lista todos los usuarios  
-- `GET /users/:id` → obtener usuario por ID  
-- `POST /users` → crear usuario  
-- `PATCH /users/:id` → actualizar usuario  
-- `DELETE /users/:id` → eliminar usuario  
+### Registro de usuario (`/auth/register`)
+- `POST /auth/register`  
+- Recibe los datos de un nuevo usuario:
+```json
+{
+  "firstName": "Hector",
+  "middleName": "M",
+  "lastName1": "Martinez",
+  "lastName2": "Lopez",
+  "email": "hector@banorte.com",
+  "password": "password123"
+}
+```
+- Si no se provee un rol, se asigna automáticamente el rol **User**.
+- Responde con los datos del usuario creado (sin la contraseña).
 
-### Empresas (`/companies`)
-- `GET /companies` → lista todas las empresas  
-- `GET /companies/:id` → obtener empresa por ID  
-- `POST /companies` → crear empresa  
-- `PATCH /companies/:id` → actualizar empresa  
-- `DELETE /companies/:id` → eliminar empresa  
+### Login (`/auth/login`)
+- `POST /auth/login`  
+- Recibe `email` y `password`:
+```json
+{
+  "email": "hector@banorte.com",
+  "password": "password123"
+}
+```
+- Valida credenciales contra la base de datos.
+- Devuelve un **JWT**:
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
+}
+```
 
-### Reglas de negocio (`/rules`)
-- `GET /rules` → lista todas las reglas  
-- `GET /rules/:id` → obtener regla por ID  
-- `POST /rules` → crear regla  
-- `PATCH /rules/:id` → actualizar regla  
-- `DELETE /rules/:id` → eliminar regla  
-
-### Próximos módulos
-- `/categories` → categorías  
-- `/states` → estados  
-- `/files` → archivos Banorte  
-- `/auth` → login con JWT  
-- `/audit-log` → auditoría de cambios  
-
----
-
-## Autenticación (pendiente)
-El sistema usará **JWT**:
-- `POST /auth/login` → recibe email + password y devuelve un token.  
-- Endpoints protegidos con `AuthGuard`.  
+### JWT y protección de rutas
+- Los endpoints que requieren autenticación usan **AuthGuard**.  
+- Debes enviar el token JWT en el header `Authorization: Bearer <token>` para acceder.
 
 ---
 
@@ -163,4 +159,4 @@ El sistema usará **JWT**:
 ## Equipo
 - **Backend**: NestJS + Prisma  
 - **Frontend**: React + Vite (otro repositorio)  
-- **DB**: PostgreSQL con Docker + Prisma  
+- **DB**: PostgreSQL con Docker + Prisma
